@@ -1,0 +1,9 @@
+body{
+    background-image: url("../images/pirate-ship-sailing-2_begxfemm__F0005.png");
+}
+
+.bg-pirate {
+    background-image: url("../images/map.jpg");
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire 
+}
