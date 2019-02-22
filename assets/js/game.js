@@ -1,11 +1,11 @@
 // Array of words.
-var wordList = ["Laptop", "Beanbag", "Cats", "Slippers"];
+var wordList = ["laptop", "beanbag", "Cats", "Slippers"];
 var wins = 0;
 var losses = 0;
 var remaining = 16;
 var lettersGuessed = [];
-var mysteryWord = '';
-
+var mysteryWord = "";
+var gameOn = false;
 
 // FUNCTIONS
 // ========================================================================================
@@ -22,73 +22,78 @@ function consoleInside(arr) {
 }
 
 function randomWord(wordArray) {
-    // Randomly chooses a choice from the options array. This is the word for the round.
-    var randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
-    return randomWord;
+  // Randomly chooses a choice from the options array. This is the word for the round.
+  var randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
+  return randomWord;
+}
+
+function createGameScreen(word) {
+  gameOn = true;
+
+  console.log(word);
+  console.log(word.length);
+
+  //Getting and setting variables on screen
+  document.getElementById("wins").innerHTML = wins.toString();
+  document.getElementById("losses").innerHTML = losses;
+  document.getElementById("remainingGuesses").innerHTML = remaining;
+  mysteryWord = fnReturnWordBlanks();
+  document.getElementById("mysteryWord").innerHTML = mysteryWord;
+  document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
+  document.getElementById("gameHeader").innerHTML = "Good Luck!";
+}
+
+function fnReturnWordBlanks() {
+  var blanks = "";
+  for (var i = 0; i < gameWord.length; i++) {
+    blanks += "-";
   }
+  return blanks;
+}
 
-  function createGameScreen(word) {
-    
-  
-    console.log(word);
-    console.log(word.length);
-
-    //Getting and setting variables on screen
-    document.getElementById("wins").innerHTML = wins.toString();
-    document.getElementById("losses").innerHTML = losses;
-    document.getElementById("remainingGuesses").innerHTML = remaining;
-    mysteryWord=fnReturnBlankWord(gameWord);
-    document.getElementById("mysteryWord").innerHTML = (mysteryWord);
-    document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
-    document.getElementById("gameHeader").innerHTML = "Good Luck!";
-    
-  }
-  
-  function fnReturnBlankWord(gw){
-    var blanks = '';
-    for (var i=0;i<gameWord.length;i++){
-        blanks+='-';
-    }
-    return blanks;
-  };
-
-  function displayAndChangeMysteryWord(ch,place){
-
-    
-    console.log('mysteryword as mw: ' + mysteryWord);
-    console.log('before:' + mysteryWord.substring(0, place));
-    console.log('after: ' + mysteryWord.substring(place+1));
-    this.mysteryWord = mysteryWord.substring(0, place) + ch + mysteryWord.substring(place+1);   
-    console.log('mysteryword changed?: ' + mysteryWord);
-    document.getElementById("mysteryWord").innerHTML = mysteryWord;
-  }
-
-  function letterChecker(word, letter) {
-    for (var i = 0; i < word.length; i++) {
-      // Each time we print a placeholder for the letters.
-  //TODO toLowerCase() cases.
-      if (letter == gameWord.charAt(i)) {
-        //if letter is found, make letter Visible
-        displayAndChangeMysteryWord(letter,i);
-        console.log("found letter " + i);
-      } else {
-        console.log("not found " + i);
-      }
+//function to see if a userGuessed key is in the lettersGuessed already array.
+function letterInArray(guess) {
+  for (var i = 0; i < lettersGuessed.length; i++) {
+    if (guess === lettersGuessed[i]) {
+      //the guess is in the guessed letter array already
+      return true;
     }
   }
+  //the guess is NOT in the guessed letter array already
+  return false;
+}
+
+function displayAndChangeMysteryWord(ch, place) {
+  console.log("mysteryword as mw: " + mysteryWord);
+  console.log("before:" + mysteryWord.substring(0, place));
+  console.log("after: " + mysteryWord.substring(place + 1));
+  this.mysteryWord =
+    mysteryWord.substring(0, place) + ch + mysteryWord.substring(place + 1);
+  console.log("mysteryword changed?: " + mysteryWord);
+  document.getElementById("mysteryWord").innerHTML = mysteryWord;
+}
+
+function letterChecker(word, letter) {
+  for (var i = 0; i < word.length; i++) {
+    // Each time we print a placeholder for the letters.
+    //TODO toLowerCase() cases.
+    if (letter == gameWord.charAt(i)) {
+      //if letter is found, make letter Visible
+      displayAndChangeMysteryWord(letter, i);
+      console.log("found letter " + i);
+    } else {
+      console.log("not found " + i);
+    }
+  }
+}
 // FUNCTION CALLS (Execution)
 // =======================================================================================
 
-// Here we call the function to run our for-loop code on each of the following arrays.
+// Here we call the function to run our for-loop code on each of the following arrays and help print info to the console.
 consoleInside(wordList);
 
 //send the word list array to the random function and assigns it to a var.
 var gameWord = randomWord(wordList);
-
-
-
-
-
 
 // This function is run whenever the user presses a key.
 document.onkeyup = function(event) {
@@ -96,22 +101,58 @@ document.onkeyup = function(event) {
   var userGuess = event.key;
 
   //set up the game screen upon any key, TODO check valid input only
-  createGameScreen(gameWord);
+  if (!gameOn) {
+    createGameScreen(gameWord);
+  }
+
+//   do {
+    
+//   }
+//   while (remaining >= 0);
+   //TODO fix this to some sort of other check, 
+    //because doesn't prompt win after a win, 
+    //only after a letter is pressed after already solved
+    // maybe use a Do While?
+if(mysteryWord === gameWord){
+    alert("You win! Please play again.");
+    gameOn = false;
+    wins++;
+    lettersGuessed = [];
+    remaining = 16;
+}
+
+else{
+       
+  //Only check guessed letters and to only take letters.
+  if (userGuess.search(/[^a-zA-Z]+/) === -1) {
+    //This only gets reached if a letter has been pushed;
+    
+      //add to guessed letters only if not already guessed.
+      if (letterInArray(userGuess)) {
+        // Alerts the key the user pressed (userGuess)
+        alert(
+          "Letter '" + userGuess + "' has already been guessed! Try again."
+        );
+      }
+
+      //else letter is not in the array of guesses yet.
+      else {
+        // console.log("Letter " + userGuess + " has NOT already been guessed!");
+        lettersGuessed.push(userGuess);
+        document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
+        letterChecker(gameWord, userGuess);
+        remaining--;
+        document.getElementById("remainingGuesses").innerHTML = remaining;
+      }
+    }
+    //else a non-letter was pressed and do nothing.
+    else {
+      alert("Please press a letter in the alphabet...");
+    }
+}
+    
   
-  //TODO creat function to check guessed letters and to only take letters. 
-  lettersGuessed.push(userGuess);
-  document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
-
-  var b = letterChecker(gameWord, userGuess);
-  // Randomly chooses a choice from the options array. This is the word for the round.
-  //   var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
-
-  // Alerts the key the user pressed (userGuess).
- 
-  alert("Letter " + userGuess + " has already been guessed!");
-  console.log(b);
 };
-
 
 //for hints TODO
 // document.getElementById("btnHint").style.display = "block";
