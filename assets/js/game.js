@@ -125,25 +125,34 @@ function letterChecker(word, letter) {
 consoleInside(wordList);
 
 //send the word list array to the random function and assigns it to a var.
-var gameWord = randomWord(wordList).toUpperCase();
+var gameWord = randomWord(wordList);
 
 // This function is run whenever the user presses a key.
 document.onkeyup = function(event) {
   // Determines which key was pressed.
-  var userGuess = event.key.toUpperCase();
+  var userGuess = event.key;
+
+
+  var key = event.key || event.keyCode;
+
+  //TODO implement this?
+  // if (key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace') {
+  //     alert('key pressings');
+  // }
+
 
   //set up the game screen upon any key, TODO check valid input only
   if (!gameOn) {
     createGameScreen(gameWord);
   } else {
-    //Only check guessed letters and to only take letters.
+    //Only check guessed letters and to only take letters by regex. event.ctrlKey || event.metaKey TODO
     if (userGuess.search(/[^a-zA-Z]+/) === -1) {
       //This only gets reached if a letter has been pushed;
 
       //add to guessed letters only if not already guessed.
       if (letterInArray(userGuess)) {
           document.getElementById("alreadyLetter").innerHTML = userGuess;      
-          $('#myModalGuessedAlready').modal('show'); 
+          $('#myModalGuessedAlready').modal({show: true, backdrop: 'static', keyboard: false});
           // Alerts the key the user pressed (userGuess)
         // alert("Letter '" + userGuess + "' has already been guessed! Try again.");
       }
@@ -163,7 +172,7 @@ document.onkeyup = function(event) {
     //else a non-letter was pressed and do nothing.
     //TODO possibly just do nothing here. 
     else {
-      $('#myModalAlphaOnly').modal('show'); 
+      $('#myModalAlphaOnly').modal({show: true, backdrop: 'static', keyboard: false});
       // alert("Please press a letter in the alphabet...");
     }
   }
@@ -172,14 +181,15 @@ document.onkeyup = function(event) {
 if (checkGameWin()){
   setTimeout(function() {
     // alert("You win! Please press another key to play again.");   
-    $('#myModalWin').modal('show');
+    $('#myModalWin').modal({show: true, backdrop: 'static', keyboard: false});
   }, 10)
   
 }
 
 if (checkRemaining()){
   //No more guesses left if true.
-  $('#myModalLose').modal('show');   
+  // $('#myModalLose').modal('show');  
+  $('#myModalLose').modal({show: true, backdrop: 'static', keyboard: false});
   // $('#myModalLose').modal('show',{
   //   keyboard: false,
   //   backdrop: false
