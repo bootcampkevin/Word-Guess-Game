@@ -1,3 +1,5 @@
+//Global Variables, then Objects, then Calls:
+
 // Array of words.
 var wordList = ["laptop", "beanbag", "Cats", "Slippers"];
 var wins = 0;
@@ -51,6 +53,34 @@ function fnReturnWordBlanks() {
   return blanks;
 }
 
+//TODO fix this to some sort of other check,
+//because doesn't prompt win after a win,
+//only after a letter is pressed after already solved
+// maybe use a Do While?
+function checkGameWin() {
+  if (mysteryWord === gameWord) {
+    gameOn = false;
+    wins++;
+    lettersGuessed = [];
+    remaining = 16;
+    return true;
+  }  
+  else {return false};
+}
+function checkRemaining() {
+  console.log('CHECK fn');
+   if (remaining == 0){
+    console.log('CHECK fn == 0');
+    gameOn = false;
+    losses++;
+    lettersGuessed = [];
+    remaining = 16;
+    return true;
+   }
+  else {return false;}
+}
+
+
 //function to see if a userGuessed key is in the lettersGuessed already array.
 function letterInArray(guess) {
   for (var i = 0; i < lettersGuessed.length; i++) {
@@ -71,6 +101,7 @@ function displayAndChangeMysteryWord(ch, place) {
     mysteryWord.substring(0, place) + ch + mysteryWord.substring(place + 1);
   console.log("mysteryword changed?: " + mysteryWord);
   document.getElementById("mysteryWord").innerHTML = mysteryWord;
+  
 }
 
 function letterChecker(word, letter) {
@@ -103,30 +134,11 @@ document.onkeyup = function(event) {
   //set up the game screen upon any key, TODO check valid input only
   if (!gameOn) {
     createGameScreen(gameWord);
-  }
+  } else {
+    //Only check guessed letters and to only take letters.
+    if (userGuess.search(/[^a-zA-Z]+/) === -1) {
+      //This only gets reached if a letter has been pushed;
 
-//   do {
-    
-//   }
-//   while (remaining >= 0);
-   //TODO fix this to some sort of other check, 
-    //because doesn't prompt win after a win, 
-    //only after a letter is pressed after already solved
-    // maybe use a Do While?
-if(mysteryWord === gameWord){
-    alert("You win! Please play again.");
-    gameOn = false;
-    wins++;
-    lettersGuessed = [];
-    remaining = 16;
-}
-
-else{
-       
-  //Only check guessed letters and to only take letters.
-  if (userGuess.search(/[^a-zA-Z]+/) === -1) {
-    //This only gets reached if a letter has been pushed;
-    
       //add to guessed letters only if not already guessed.
       if (letterInArray(userGuess)) {
         // Alerts the key the user pressed (userGuess)
@@ -138,6 +150,8 @@ else{
       //else letter is not in the array of guesses yet.
       else {
         // console.log("Letter " + userGuess + " has NOT already been guessed!");
+
+        //TODO: Meta gets pushed. Also cap letters are in.
         lettersGuessed.push(userGuess);
         document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
         letterChecker(gameWord, userGuess);
@@ -149,10 +163,47 @@ else{
     else {
       alert("Please press a letter in the alphabet...");
     }
+  }
+
+//putting the check win here to display all letters before inform of a win
+if (checkGameWin()){
+  setTimeout(function() {
+    alert("You win! Please press another key to play again.");   
+  }, 10)
 }
-    
-  
+
+if (checkRemaining()){
+  setTimeout(function() {
+    alert("No more guesses left! You lose. Please press another key to play again.");   
+  }, 10)  
+}
+
+
 };
 
+//example of an object
 //for hints TODO
 // document.getElementById("btnHint").style.display = "block";
+var person = {
+  name: ["Bob", "Smith"],
+  age: 32,
+  gender: "male",
+  interests: ["music", "skiing"],
+  bio: function() {
+    alert(
+      this.name[0] +
+        " " +
+        this.name[1] +
+        " is " +
+        this.age +
+        " years old. He likes " +
+        this.interests[0] +
+        " and " +
+        this.interests[1] +
+        "."
+    );
+  },
+  greeting: function() {
+    alert("Hi! I'm " + this.name[0] + ".");
+  }
+};
