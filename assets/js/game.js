@@ -68,9 +68,10 @@ function checkGameWin() {
   else {return false};
 }
 function checkRemaining() {
-  console.log('CHECK fn');
+  // console.log('CHECK fn');
    if (remaining == 0){
-    console.log('CHECK fn == 0');
+    //if reaming is at 0, need to reset some variables
+    // console.log('CHECK fn == 0');
     gameOn = false;
     losses++;
     lettersGuessed = [];
@@ -94,12 +95,12 @@ function letterInArray(guess) {
 }
 
 function displayAndChangeMysteryWord(ch, place) {
-  console.log("mysteryword as mw: " + mysteryWord);
-  console.log("before:" + mysteryWord.substring(0, place));
-  console.log("after: " + mysteryWord.substring(place + 1));
+  // console.log("mysteryword as mw: " + mysteryWord);
+  // console.log("before:" + mysteryWord.substring(0, place));
+  // console.log("after: " + mysteryWord.substring(place + 1));
   this.mysteryWord =
     mysteryWord.substring(0, place) + ch + mysteryWord.substring(place + 1);
-  console.log("mysteryword changed?: " + mysteryWord);
+  // console.log("mysteryword changed?: " + mysteryWord);
   document.getElementById("mysteryWord").innerHTML = mysteryWord;
   
 }
@@ -111,9 +112,9 @@ function letterChecker(word, letter) {
     if (letter == gameWord.charAt(i)) {
       //if letter is found, make letter Visible
       displayAndChangeMysteryWord(letter, i);
-      console.log("found letter " + i);
+      // console.log("found letter " + i);
     } else {
-      console.log("not found " + i);
+      // console.log("not found " + i);
     }
   }
 }
@@ -141,17 +142,17 @@ document.onkeyup = function(event) {
 
       //add to guessed letters only if not already guessed.
       if (letterInArray(userGuess)) {
-        // Alerts the key the user pressed (userGuess)
-        alert(
-          "Letter '" + userGuess + "' has already been guessed! Try again."
-        );
+          document.getElementById("alreadyLetter").innerHTML = userGuess;      
+          $('#myModalGuessedAlready').modal('show'); 
+          // Alerts the key the user pressed (userGuess)
+        // alert("Letter '" + userGuess + "' has already been guessed! Try again.");
       }
 
       //else letter is not in the array of guesses yet.
       else {
         // console.log("Letter " + userGuess + " has NOT already been guessed!");
 
-        //TODO: Meta gets pushed. Also cap letters are in.
+        //TODO: Meta gets pushed. Also cap letters get pushed. Shift keys
         lettersGuessed.push(userGuess);
         document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
         letterChecker(gameWord, userGuess);
@@ -160,22 +161,27 @@ document.onkeyup = function(event) {
       }
     }
     //else a non-letter was pressed and do nothing.
+    //TODO possibly just do nothing here. 
     else {
-      alert("Please press a letter in the alphabet...");
+      $('#myModalAlphaOnly').modal('show'); 
+      // alert("Please press a letter in the alphabet...");
     }
   }
 
 //putting the check win here to display all letters before inform of a win
 if (checkGameWin()){
   setTimeout(function() {
-    alert("You win! Please press another key to play again.");   
+    // alert("You win! Please press another key to play again.");   
+    $('#myModalWin').modal('show');
   }, 10)
+  
 }
 
 if (checkRemaining()){
-  setTimeout(function() {
-    alert("No more guesses left! You lose. Please press another key to play again.");   
-  }, 10)  
+  $('#myModalLose').modal('show');   
+  // setTimeout(function() {
+  //   alert("No more guesses left! You lose. Please press another key to play again.");   
+  // }, 10)  
 }
 
 
