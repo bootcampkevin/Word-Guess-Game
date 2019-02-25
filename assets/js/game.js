@@ -125,12 +125,12 @@ function letterChecker(word, letter) {
 consoleInside(wordList);
 
 //send the word list array to the random function and assigns it to a var.
-var gameWord = randomWord(wordList);
+var gameWord = randomWord(wordList).toUpperCase();
 
 // This function is run whenever the user presses a key.
 document.onkeyup = function(event) {
   // Determines which key was pressed.
-  var userGuess = event.key;
+  var userGuess = event.key.toUpperCase();
 
   //set up the game screen upon any key, TODO check valid input only
   if (!gameOn) {
@@ -178,7 +178,12 @@ if (checkGameWin()){
 }
 
 if (checkRemaining()){
+  //No more guesses left if true.
   $('#myModalLose').modal('show');   
+  // $('#myModalLose').modal('show',{
+  //   keyboard: false,
+  //   backdrop: false
+  // });   
   // setTimeout(function() {
   //   alert("No more guesses left! You lose. Please press another key to play again.");   
   // }, 10)  
