@@ -53,10 +53,7 @@ function fnReturnWordBlanks() {
   return blanks;
 }
 
-//TODO fix this to some sort of other check,
-//because doesn't prompt win after a win,
-//only after a letter is pressed after already solved
-// maybe use a Do While?
+
 function checkGameWin() {
   if (mysteryWord === gameWord) {
     gameOn = false;
@@ -125,28 +122,29 @@ function letterChecker(word, letter) {
 consoleInside(wordList);
 
 //send the word list array to the random function and assigns it to a var.
-var gameWord = randomWord(wordList);
+var gameWord = randomWord(wordList).toUpperCase();
 
 // This function is run whenever the user presses a key.
 document.onkeyup = function(event) {
   // Determines which key was pressed.
-  var userGuess = event.key;
+  var userGuess = event.key.toUpperCase();
 
 
   var key = event.key || event.keyCode;
 
   //TODO implement this?
   // if (key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace') {
-  //     alert('key pressings');
+  //     alert('wrong key pressings');
   // }
 
 
-  //set up the game screen upon any key, TODO check valid input only
+  //set up the game screen upon any key
   if (!gameOn) {
     createGameScreen(gameWord);
   } else {
     //Only check guessed letters and to only take letters by regex. event.ctrlKey || event.metaKey TODO
-    if (userGuess.search(/[^a-zA-Z]+/) === -1) {
+    // if ((userGuess.search(/[^a-zA-Z]+/) === -1)) {
+    if ((userGuess.search(/[^a-zA-Z]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
       //This only gets reached if a letter has been pushed;
 
       //add to guessed letters only if not already guessed.
