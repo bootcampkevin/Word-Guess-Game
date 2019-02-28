@@ -8,6 +8,12 @@ var remaining = 16;
 var lettersGuessed = [];
 var mysteryWord = "";
 var gameOn = false;
+var dirty = true;
+var audioWin = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
+var audioLose = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
+
+
+
 
 // FUNCTIONS
 // ========================================================================================
@@ -124,6 +130,8 @@ consoleInside(wordList);
 //send the word list array to the random function and assigns it to a var.
 var gameWord = randomWord(wordList).toUpperCase();
 
+
+
 // This function is run whenever the user presses a key.
 document.onkeyup = function(event) {
   // Determines which key was pressed.
@@ -142,23 +150,28 @@ document.onkeyup = function(event) {
   if (!gameOn) {
     createGameScreen(gameWord);
   } else {
+
     //Only check guessed letters and to only take letters by regex. event.ctrlKey || event.metaKey TODO
     // if ((userGuess.search(/[^a-zA-Z]+/) === -1)) {
     if ((userGuess.search(/[^a-zA-Z]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
       //This only gets reached if a letter has been pushed;
-
+    
       //add to guessed letters only if not already guessed.
       if (letterInArray(userGuess)) {
           document.getElementById("alreadyLetter").innerHTML = userGuess;      
           $('#myModalGuessedAlready').modal({show: true, backdrop: 'static', keyboard: false});
-          // Alerts the key the user pressed (userGuess)
-        // alert("Letter '" + userGuess + "' has already been guessed! Try again.");
-      }
 
+        // Alerts the key the user pressed (userGuess)
+        // alert("Letter '" + userGuess + "' has already been guessed! Try again.");
+
+        //event.preventDefault();
+        
+      
+    }
       //else letter is not in the array of guesses yet.
       else {
         // console.log("Letter " + userGuess + " has NOT already been guessed!");
-
+        
         //TODO: Meta gets pushed. Also cap letters get pushed. Shift keys
         lettersGuessed.push(userGuess);
         document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
@@ -166,19 +179,22 @@ document.onkeyup = function(event) {
         remaining--;
         document.getElementById("remainingGuesses").innerHTML = remaining;
       }
+    
     }
     //else a non-letter was pressed and do nothing.
     //TODO possibly just do nothing here. 
     else {
-      $('#myModalAlphaOnly').modal({show: true, backdrop: 'static', keyboard: false});
+      // $('#myModalAlphaOnly').modal({show: true, backdrop: 'static', keyboard: false});
       // alert("Please press a letter in the alphabet...");
+      //  DO NOTHING THEN!!!   
     }
   }
 
 //putting the check win here to display all letters before inform of a win
 if (checkGameWin()){
   setTimeout(function() {
-    // alert("You win! Please press another key to play again.");   
+    // alert("You win! Please press another key to play again.");  
+    audioWin.play(); 
     $('#myModalWin').modal({show: true, backdrop: 'static', keyboard: false});
   }, 10)
   
@@ -187,6 +203,7 @@ if (checkGameWin()){
 if (checkRemaining()){
   //No more guesses left if true.
   // $('#myModalLose').modal('show');  
+  audioLose.play();
   $('#myModalLose').modal({show: true, backdrop: 'static', keyboard: false});
   // $('#myModalLose').modal('show',{
   //   keyboard: false,
