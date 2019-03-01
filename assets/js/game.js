@@ -9,8 +9,9 @@ var lettersGuessed = [];
 var mysteryWord = "";
 var gameOn = false;
 var dirty = true;
-var audioWin = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
-var audioLose = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
+//var audioLose = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
+var audioWin = new Audio('../assets/sounds/cannon.mp3');
+var audioLose = new Audio('../assets/sounds/daviejones.mp3');
 var gameWord = '';
 
 
