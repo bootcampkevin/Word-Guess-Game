@@ -1,7 +1,7 @@
 //Global Variables, then Objects, then Calls:
 
-// Array of words.
-var wordList = ["laptop", "beanbag", "Cats", "Slippers"];
+// Array of words. must ONLY contain a-z, A_Z,  and/or a space ' '. 
+var wordList = ["laptop", "beanbag", "two words", "th ree words", "Cats", "Slippers"];
 var wins = 0;
 var losses = 0;
 var remaining = 16;
@@ -11,7 +11,7 @@ var gameOn = false;
 var dirty = true;
 var audioWin = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
 var audioLose = new Audio('https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3');
-
+var gameWord = '';
 
 
 
@@ -121,14 +121,20 @@ function letterChecker(word, letter) {
     }
   }
 }
+
+// Cancel click event - stops the action of the game until the ok/cancel button is pressed.
+function cancelAction(){  
+  dirty = true;
+};
+
+
+
 // FUNCTION CALLS (Execution)
 // =======================================================================================
 
 // Here we call the function to run our for-loop code on each of the following arrays and help print info to the console.
 consoleInside(wordList);
 
-//send the word list array to the random function and assigns it to a var.
-var gameWord = randomWord(wordList).toUpperCase();
 
 
 
@@ -148,19 +154,27 @@ document.onkeyup = function(event) {
 
   //set up the game screen upon any key
   if (!gameOn) {
+    //send the word list array to the random function and assigns it to a var.
+    gameWord = randomWord(wordList).toUpperCase();
+
     createGameScreen(gameWord);
   } else {
-
-    //Only check guessed letters and to only take letters by regex. event.ctrlKey || event.metaKey TODO
-    // if ((userGuess.search(/[^a-zA-Z]+/) === -1)) {
-    if ((userGuess.search(/[^a-zA-Z]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
+    //dirty is a boolean to stop action of the screen if a modal is showing. 
+    if(dirty){
+//   if (event.defaultPrevented) {
+//     return;
+// }
+    //Only check guessed letters and to only take letters by regex. add a 'space' at the end to include spacebar valid inputs
+    // if ((userGuess.search(/[^a-zA-Z ]+/) === -1)) {
+    if ((userGuess.search(/[^a-zA-Z ]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
       //This only gets reached if a letter has been pushed;
-    
+      
       //add to guessed letters only if not already guessed.
       if (letterInArray(userGuess)) {
+        
           document.getElementById("alreadyLetter").innerHTML = userGuess;      
           $('#myModalGuessedAlready').modal({show: true, backdrop: 'static', keyboard: false});
-
+          dirty = false;
         // Alerts the key the user pressed (userGuess)
         // alert("Letter '" + userGuess + "' has already been guessed! Try again.");
 
@@ -192,11 +206,12 @@ document.onkeyup = function(event) {
 
 //putting the check win here to display all letters before inform of a win
 if (checkGameWin()){
-  setTimeout(function() {
+  // setTimeout(function() {
     // alert("You win! Please press another key to play again.");  
     audioWin.play(); 
     $('#myModalWin').modal({show: true, backdrop: 'static', keyboard: false});
-  }, 10)
+    dirty = false;
+  // }, 10)
   
 }
 
@@ -205,6 +220,7 @@ if (checkRemaining()){
   // $('#myModalLose').modal('show');  
   audioLose.play();
   $('#myModalLose').modal({show: true, backdrop: 'static', keyboard: false});
+  dirty = false;
   // $('#myModalLose').modal('show',{
   //   keyboard: false,
   //   backdrop: false
@@ -214,7 +230,7 @@ if (checkRemaining()){
   // }, 10)  
 }
 
-
+}
 };
 
 //example of an object
