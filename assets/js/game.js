@@ -19,23 +19,25 @@ var gameWord = '';
 // FUNCTIONS
 // ========================================================================================
 
-// Here we create a "Function" that allows us to "call" (run) the loop for any array we wish.
-// We pass in an array as an "argument".
+// fn that loops through the array of mystery words
+// uses the word array as an argument to console.log the array for debugging.
 function consoleInside(arr) {
   // We then loop through the selected array.
   for (var i = 0; i < arr.length; i++) {
     // Each time we print the value inside the array.
     console.log(arr[i]);
   }
-  console.log("----Above Array of Words----");
+  console.log("----Above is My Array of Words----");
 }
 
+// Randomly chooses a choice from the options array. This is the word for the round.
 function randomWord(wordArray) {
-  // Randomly chooses a choice from the options array. This is the word for the round.
+  
   var randomWord = wordArray[Math.floor(Math.random() * wordArray.length)];
   return randomWord;
 }
 
+//creates the game screen, sets the gameOn to true, and populates elements in the DOM 
 function createGameScreen(word) {
   gameOn = true;
 
@@ -52,6 +54,7 @@ function createGameScreen(word) {
   document.getElementById("gameHeader").innerHTML = "Good Luck!";
 }
 
+//returns a blank words, filled with hyphens corresponding to the number of letters in the mystery word chosen for this game.  
 function fnReturnWordBlanks() {
   var blanks = "";
   for (var i = 0; i < gameWord.length; i++) {
@@ -60,7 +63,8 @@ function fnReturnWordBlanks() {
   return blanks;
 }
 
-
+//checks for a game WIN by comparing the game's mystery word with the updated 'hyphened' called gameWord
+//fn then turns the flag to false for a continued game, raises the number of wins, and resets some variables 
 function checkGameWin() {
   if (mysteryWord === gameWord) {
     gameOn = false;
@@ -71,11 +75,13 @@ function checkGameWin() {
   }  
   else {return false};
 }
+
+//fn to check the remaining number of guesses, and returns true if the game needs to end,
+// after turning the game flag off, increases number of losses and resets some vars
 function checkRemaining() {
-  // console.log('CHECK fn');
    if (remaining == 0){
     //if reaming is at 0, need to reset some variables
-    // console.log('CHECK fn == 0');
+    
     gameOn = false;
     losses++;
     lettersGuessed = [];
@@ -99,26 +105,24 @@ function letterInArray(guess) {
 }
 
 function displayAndChangeMysteryWord(ch, place) {
-  // console.log("mysteryword as mw: " + mysteryWord);
-  // console.log("before:" + mysteryWord.substring(0, place));
-  // console.log("after: " + mysteryWord.substring(place + 1));
+  //no need for 'this' keyword, just checking that it would work
   this.mysteryWord =
     mysteryWord.substring(0, place) + ch + mysteryWord.substring(place + 1);
-  // console.log("mysteryword changed?: " + mysteryWord);
+  
   document.getElementById("mysteryWord").innerHTML = mysteryWord;
   
 }
 
+//fn takes the gameword and a letter as arguments and checks to see if the letter is in the word
 function letterChecker(word, letter) {
   for (var i = 0; i < word.length; i++) {
-    // Each time we print a placeholder for the letters.
-    //TODO toLowerCase() cases.
+       
     if (letter == gameWord.charAt(i)) {
       //if letter is found, make letter Visible
       displayAndChangeMysteryWord(letter, i);
-      // console.log("found letter " + i);
+      
     } else {
-      // console.log("not found " + i);
+      //Do nothing
     }
   }
 }
@@ -128,32 +132,29 @@ function cancelAction(){
   dirty = true;
 };
 
-
-
 // FUNCTION CALLS (Execution)
 // =======================================================================================
 
-// Here we call the function to run our for-loop code on each of the following arrays and help print info to the console.
+// Here we call the function to run our for-loop code on each of the following arrays
+// and help print info to the console for the TA's and debugging.
 consoleInside(wordList);
-
-
-
 
 // This function is run whenever the user presses a key.
 document.onkeyup = function(event) {
-  // Determines which key was pressed.
+  // Determines which key was pressed, and makes it uppercase to avoid case sensitivity
   var userGuess = event.key.toUpperCase();
 
 
   var key = event.key || event.keyCode;
 
-  //TODO implement this?
+  //played with key events and key codes to prevent certain keys from populating the array
+  //of letters guessed; I used it later.  
   // if (key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace') {
-  //     alert('wrong key pressings');
+  //     alert('wrong key');
   // }
 
 
-  //set up the game screen upon any key
+  //set up the game screen upon any key if the game should be running
   if (!gameOn) {
     //send the word list array to the random function and assigns it to a var.
     gameWord = randomWord(wordList).toUpperCase();
@@ -161,12 +162,12 @@ document.onkeyup = function(event) {
     createGameScreen(gameWord);
   } else {
     //dirty is a boolean to stop action of the screen if a modal is showing. 
+    //I tried playing with  if (event.defaultPrevented) {return;}
+    //which was passed my pay-grade, so I made a flag to turn the game on and off called dirty.
     if(dirty){
-//   if (event.defaultPrevented) {
-//     return;
-// }
+
     //Only check guessed letters and to only take letters by regex. add a 'space' at the end to include spacebar valid inputs
-    // if ((userGuess.search(/[^a-zA-Z ]+/) === -1)) {
+    // if ((userGuess.search(/[^a-zA-Z ]+/) === -1)) {  //later implemented the Meta Keys
     if ((userGuess.search(/[^a-zA-Z ]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
       //This only gets reached if a letter has been pushed;
       
@@ -175,19 +176,11 @@ document.onkeyup = function(event) {
         
           document.getElementById("alreadyLetter").innerHTML = userGuess;      
           $('#myModalGuessedAlready').modal({show: true, backdrop: 'static', keyboard: false});
-          dirty = false;
-        // Alerts the key the user pressed (userGuess)
-        // alert("Letter '" + userGuess + "' has already been guessed! Try again.");
-
-        //event.preventDefault();
-        
-      
+          //dirty is triggered because I want to prevent the DOM from continuing the game while the modal is visible. 
+          dirty = false;       
     }
-      //else letter is not in the array of guesses yet.
-      else {
-        // console.log("Letter " + userGuess + " has NOT already been guessed!");
-        
-        //TODO: Meta gets pushed. Also cap letters get pushed. Shift keys
+      //else letter is not in the array of guesses yet, puts it in the array of guesses, decreases number of guesses remaining; updates DOM
+      else {        
         lettersGuessed.push(userGuess);
         document.getElementById("lettersGuessed").innerHTML = lettersGuessed;
         letterChecker(gameWord, userGuess);
@@ -197,66 +190,27 @@ document.onkeyup = function(event) {
     
     }
     //else a non-letter was pressed and do nothing.
-    //TODO possibly just do nothing here. 
+    
     else {
+      //decided to not use a modal, and do nothing for invalid keys like numbers or the plus key, etc.
       // $('#myModalAlphaOnly').modal({show: true, backdrop: 'static', keyboard: false});
-      // alert("Please press a letter in the alphabet...");
       //  DO NOTHING THEN!!!   
     }
   }
 
 //putting the check win here to display all letters before inform of a win
 if (checkGameWin()){
-  // setTimeout(function() {
-    // alert("You win! Please press another key to play again.");  
     audioWin.play(); 
     $('#myModalWin').modal({show: true, backdrop: 'static', keyboard: false});
-    dirty = false;
-  // }, 10)
-  
+    dirty = false;  
 }
 
 if (checkRemaining()){
   //No more guesses left if true.
-  // $('#myModalLose').modal('show');  
   audioLose.play();
   $('#myModalLose').modal({show: true, backdrop: 'static', keyboard: false});
-  dirty = false;
-  // $('#myModalLose').modal('show',{
-  //   keyboard: false,
-  //   backdrop: false
-  // });   
-  // setTimeout(function() {
-  //   alert("No more guesses left! You lose. Please press another key to play again.");   
-  // }, 10)  
+  dirty = false;  
 }
 
 }
-};
-
-//example of an object
-//for hints TODO
-// document.getElementById("btnHint").style.display = "block";
-var person = {
-  name: ["Bob", "Smith"],
-  age: 32,
-  gender: "male",
-  interests: ["music", "skiing"],
-  bio: function() {
-    alert(
-      this.name[0] +
-        " " +
-        this.name[1] +
-        " is " +
-        this.age +
-        " years old. He likes " +
-        this.interests[0] +
-        " and " +
-        this.interests[1] +
-        "."
-    );
-  },
-  greeting: function() {
-    alert("Hi! I'm " + this.name[0] + ".");
-  }
 };
