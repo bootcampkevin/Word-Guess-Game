@@ -1,7 +1,7 @@
 //Global Variables, then Objects, then Calls:
 
 // Array of words. must ONLY contain a-z, A_Z,  and/or a space ' '. 
-var wordList = ["laptop", "beanbag", "two words", "th ree words", "Cats", "Slippers"];
+var wordList = ["laptop", "beanbag", "two words", "three small words", "Cats", "Slippers"];
 var wins = 0;
 var losses = 0;
 var remaining = 16;
