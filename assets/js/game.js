@@ -127,8 +127,13 @@ function letterChecker(word, letter) {
   }
 }
 
-// Cancel click event - stops the action of the game until the ok/cancel button is pressed.
+// Cancel click event - stops the action of the game and resets the game.
 function cancelAction(){  
+  setTimeout(function(){ document.location.reload(); }, 700);
+  dirty = true;
+};
+// Pause game event - pauses the action of the game until the ok/cancel button is pressed.
+function pauseAction(){   
   dirty = true;
 };
 
