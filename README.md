@@ -1,7 +1,6 @@
 # Word-Guess-Game
 
-Word-Guess-Game is a simple game built upon javascript as an introduction to the .js language.
-
+Word-Guess-Game is a simple game built upon javascript
 
 ## Installation
 

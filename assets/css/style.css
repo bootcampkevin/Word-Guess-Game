@@ -1,7 +1,9 @@
 body{
     background-image: url("../images/pirate-ship-sailing.png");
 }
-
+#mysteryWord{
+    letter-spacing: 0.2em;
+}
 .bg-pirate {
     background-image: url("../images/map.jpg");
     background-repeat: no-repeat; /* Do not repeat the image */

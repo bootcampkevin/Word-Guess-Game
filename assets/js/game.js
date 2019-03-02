@@ -27,7 +27,7 @@ function consoleInside(arr) {
     // Each time we print the value inside the array.
     console.log(arr[i]);
   }
-  console.log("----Above is My Array of Words----");
+  console.log("----INFO FOR TA's: Above is the Array of Words----");
 }
 
 // Randomly chooses a choice from the options array. This is the word for the round.
@@ -41,9 +41,8 @@ function randomWord(wordArray) {
 function createGameScreen(word) {
   gameOn = true;
 
-  console.log(word);
-  console.log(word.length);
-
+  console.log("For the TA's: " + word);
+  
   //Getting and setting variables on screen
   document.getElementById("wins").innerHTML = wins.toString();
   document.getElementById("losses").innerHTML = losses;
@@ -57,8 +56,11 @@ function createGameScreen(word) {
 //returns a blank words, filled with hyphens corresponding to the number of letters in the mystery word chosen for this game.  
 function fnReturnWordBlanks() {
   var blanks = "";
-  for (var i = 0; i < gameWord.length; i++) {
-    blanks += "-";
+  for (var i = 0; i < gameWord.length; i++) { 
+    if (gameWord[i]===` `)
+      blanks += ` `;
+      else {   
+      blanks += "_";    }
   }
   return blanks;
 }
@@ -106,8 +108,9 @@ function letterInArray(guess) {
 
 function displayAndChangeMysteryWord(ch, place) {
   //no need for 'this' keyword, just checking that it would work
-  this.mysteryWord =
-    mysteryWord.substring(0, place) + ch + mysteryWord.substring(place + 1);
+  
+  this.mysteryWord = mysteryWord.substring(0, place) + ch + mysteryWord.substring(place + 1);
+
   
   document.getElementById("mysteryWord").innerHTML = mysteryWord;
   
@@ -172,8 +175,8 @@ document.onkeyup = function(event) {
     if(dirty){
 
     //Only check guessed letters and to only take letters by regex. add a 'space' at the end to include spacebar valid inputs
-    // if ((userGuess.search(/[^a-zA-Z ]+/) === -1)) {  //later implemented the Meta Keys
-    if ((userGuess.search(/[^a-zA-Z ]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
+    // if ((userGuess.search(/[^a-zA-Z]+/) === -1)) {  //later implemented the Meta Keys
+    if ((userGuess.search(/[^a-zA-Z]+/) === -1) && !(key === 'Escape' || key === 'Esc' || key === 27 || key === 'Shift' || key === 'Control' || key === 'Alt' || key === 'Meta' || key === 'Tab' || key === 'Enter' || key === 'Return' || key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Backspace')) {
       //This only gets reached if a letter has been pushed;
       
       //add to guessed letters only if not already guessed.
